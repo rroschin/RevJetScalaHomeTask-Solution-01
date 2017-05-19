@@ -1,0 +1,37 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+jar {
+  baseName = 'rj-test-task'
+  version = '1.0.0'
+}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile 'org.projectlombok:lombok:1.16.10'
+  
+  compile 'junit:junit:4.12'
+}
+
+task run(dependsOn: build, group: 'Run the Application', description: 'Runs the Application.') << {
+  println("Running the application from jar: $jar.archivePath")
+  javaexec { main = "-jar"; args = [ '', jar.archivePath ] }
+}
+
+eclipse {
+  classpath {
+     containers.remove 'org.eclipse.jdt.launching.JRE_CONTAINER'
+     containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+  }
+}
